@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Mercy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .title {
+            font-size: 4rem;
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+            margin-bottom: 80px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .doors-container {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .door {
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(135deg, #333, #666);
+            border: 3px solid #888;
+            border-radius: 15px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
+        }
+
+        .door:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(255, 0, 0, 0.6);
+            border-color: #ff0000;
+        }
+
+        .door::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            background: #gold;
+            border-radius: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 10px #ffd700;
+        }
+
+        .door-number {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: none;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #cc0000;
+            transform: scale(1.05);
+        }
+
+        /* Screen 2 styles */
+        .media-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 30px;
+        }
+
+        .audio-placeholder, .image-placeholder {
+            padding: 40px;
+            border: 2px dashed #ff0000;
+            border-radius: 10px;
+            text-align: center;
+            color: #ff0000;
+            font-size: 1.5rem;
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        /* Game screen styles */
+        .game-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ball {
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at 30% 30%, #ff6666, #ff0000, #cc0000);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            transition: none;
+        }
+
+        .game-info {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            color: white;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .random-doors {
+            animation: randomColor 3s infinite;
+        }
+
+        @keyframes randomColor {
+            0% { border-color: #888; }
+            25% { border-color: #ff0000; }
+            50% { border-color: #00ff00; }
+            75% { border-color: #0000ff; }
+            100% { border-color: #888; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main screen -->
+    <div id="mainScreen">
+        <h1 class="title">NO MERCY</h1>
+        <div class="doors-container">
+            <div class="door" onclick="openDoor(1)">
+                <div class="door-number">1</div>
+            </div>
+            <div class="door" onclick="openDoor(2)">
+                <div class="door-number">2</div>
+            </div>
+            <div class="door" onclick="openDoor(3)">
+                <div class="door-number">3</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 1: Website redirect -->
+    <div id="screen1" class="screen">
+        <button class="back-btn" onclick="goBack()">العودة</button>
+        <div style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+            <h2 style="color: #ff0000; margin-bottom: 30px;">جاري التوجيه إلى الموقع...</h2>
+            <div style="width: 50px; height: 50px; border: 3px solid #ff0000; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        </div>
+    </div>
+
+    <!-- Screen 2: Media -->
+    <div id="screen2" class="screen">
+        <button class="back-btn" onclick="goBack()">العودة</button>
+        <div class="media-container">
+            <div class="audio-placeholder">
+                🎵 هنا ملف صوت 🎵
+            </div>
+            <div class="image-placeholder">
+                🖼️ هنا ملف صورة 🖼️
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 3: Game -->
+    <div id="screen3" class="screen">
+        <button class="back-btn" onclick="goBack()">العودة</button>
+        <div class="game-info">
+            استخدم مفاتيح الأسهم أو WASD للتحكم بالكرة
+        </div>
+        <div class="game-container" id="gameContainer">
+            <div class="ball" id="ball"></div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <script>
+        let currentScreen = 'main';
+        let gameRunning = false;
+        let ball = null;
+        let ballPosition = { x: 400, y: 100 };
+        let ballVelocity = { x: 0, y: 0 };
+        let keys = {};
+        let gravity = 0.5;
+        let friction = 0.98;
+        let gameAnimationFrame = null;
+
+        function openDoor(doorNumber) {
+            // Random door effect
+            randomizeDoors();
+            
+            setTimeout(() => {
+                if (doorNumber === 1) {
+                    // Open website
+                    currentScreen = 'screen1';
+                    document.getElementById('mainScreen').style.display = 'none';
+                    document.getElementById('screen1').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.open('https://hiror.vercel.app/', '_blank');
+                    }, 2000);
+                    
+                } else if (doorNumber === 2) {
+                    // Show media
+                    currentScreen = 'screen2';
+                    document.getElementById('mainScreen').style.display = 'none';
+                    document.getElementById('screen2').style.display = 'block';
+                    
+                } else if (doorNumber === 3) {
+                    // Start game
+                    currentScreen = 'screen3';
+                    document.getElementById('mainScreen').style.display = 'none';
+                    document.getElementById('screen3').style.display = 'block';
+                    startGame();
+                }
+            }, 500);
+        }
+
+        function randomizeDoors() {
+            const doors = document.querySelectorAll('.door');
+            doors.forEach(door => {
+                door.classList.add('random-doors');
+                setTimeout(() => {
+                    door.classList.remove('random-doors');
+                }, 3000);
+            });
+        }
+
+        function goBack() {
+            if (currentScreen === 'screen3') {
+                stopGame();
+            }
+            
+            document.getElementById('mainScreen').style.display = 'flex';
+            document.getElementById('screen1').style.display = 'none';
+            document.getElementById('screen2').style.display = 'none';
+            document.getElementById('screen3').style.display = 'none';
+            currentScreen = 'main';
+        }
+
+        function startGame() {
+            gameRunning = true;
+            ball = document.getElementById('ball');
+            ballPosition = { x: 400, y: 100 };
+            ballVelocity = { x: 0, y: 0 };
+            
+            // Set initial ball position
+            ball.style.left = ballPosition.x + 'px';
+            ball.style.top = ballPosition.y + 'px';
+            
+            // Add event listeners
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('keyup', handleKeyUp);
+            
+            // Start game loop
+            gameLoop();
+        }
+
+        function stopGame() {
+            gameRunning = false;
+            if (gameAnimationFrame) {
+                cancelAnimationFrame(gameAnimationFrame);
+            }
+            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('keyup', handleKeyUp);
+            keys = {};
+        }
+
+        function handleKeyDown(e) {
+            keys[e.key.toLowerCase()] = true;
+            e.preventDefault();
+        }
+
+        function handleKeyUp(e) {
+            keys[e.key.toLowerCase()] = false;
+            e.preventDefault();
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            // Handle input
+            const speed = 1.5;
+            if (keys['arrowleft'] || keys['a']) {
+                ballVelocity.x -= speed;
+            }
+            if (keys['arrowright'] || keys['d']) {
+                ballVelocity.x += speed;
+            }
+            if (keys['arrowup'] || keys['w']) {
+                ballVelocity.y -= speed * 2; // Jump
+            }
+            if (keys['arrowdown'] || keys['s']) {
+                ballVelocity.y += speed;
+            }
+
+            // Apply gravity
+            ballVelocity.y += gravity;
+            
+            // Apply friction
+            ballVelocity.x *= friction;
+            
+            // Update position
+            ballPosition.x += ballVelocity.x;
+            ballPosition.y += ballVelocity.y;
+            
+            // Boundary collision
+            const containerWidth = window.innerWidth - 30;
+            const containerHeight = window.innerHeight - 30;
+            
+            if (ballPosition.x < 0) {
+                ballPosition.x = 0;
+                ballVelocity.x *= -0.7;
+            }
+            if (ballPosition.x > containerWidth) {
+                ballPosition.x = containerWidth;
+                ballVelocity.x *= -0.7;
+            }
+            if (ballPosition.y < 0) {
+                ballPosition.y = 0;
+                ballVelocity.y *= -0.7;
+            }
+            if (ballPosition.y > containerHeight) {
+                ballPosition.y = containerHeight;
+                ballVelocity.y *= -0.7;
+            }
+            
+            // Update ball position
+            ball.style.left = ballPosition.x + 'px';
+            ball.style.top = ballPosition.y + 'px';
+            
+            gameAnimationFrame = requestAnimationFrame(gameLoop);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            currentScreen = 'main';
+        });
+    </script>
+</body>
+</html>
