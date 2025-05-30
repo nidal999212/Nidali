@@ -125,14 +125,33 @@
             gap: 30px;
         }
 
-        .audio-placeholder, .image-placeholder {
-            padding: 40px;
-            border: 2px dashed #ff0000;
-            border-radius: 10px;
-            text-align: center;
-            color: #ff0000;
-            font-size: 1.5rem;
+        .audio-player {
+            width: 400px;
+            padding: 20px;
+            border: 2px solid #ff0000;
+            border-radius: 15px;
             background: rgba(255, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .audio-player audio {
+            width: 100%;
+            filter: sepia(100%) saturate(200%) hue-rotate(320deg);
+        }
+
+        .image-container {
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            padding: 10px;
+            background: rgba(255, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .image-container img {
+            max-width: 400px;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
 
         /* Game screen styles */
@@ -205,13 +224,18 @@
 
     <!-- Screen 2: Media -->
     <div id="screen2" class="screen">
-        <button class="back-btn" onclick="goBack()">back</button>
+        <button class="back-btn" onclick="goBack()">العودة</button>
         <div class="media-container">
-            <div class="Bzl3bSM1H4o.m4a">
-                
+            <div class="audio-player">
+                <audio controls autoplay>
+                    <source src="Bzl3bSM1H4o.m4a" type="audio/mp4">
+                    <source src="Bzl3bSM1H4o.m4a" type="audio/mpeg">
+                    عذراً، متصفحك لا يدعم تشغيل الصوت
+                </audio>
             </div>
-            <div class="4ea63956ed4deb017f5107b69f62f3dc.jpg">
-            
+            <div class="image-container">
+                <img src="4ea63956ed4deb017f5107b69f62f3dc.jpg" alt="صورة التطبيق" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; color: #ff0000; text-align: center; padding: 20px;">لم يتم العثور على الصورة</div>
             </div>
         </div>
     </div>
@@ -220,7 +244,7 @@
     <div id="screen3" class="screen">
         <button class="back-btn" onclick="goBack()">العودة</button>
         <div class="game-info">
-            🕳️  
+            استخدم مفاتيح الأسهم أو WASD للتحكم بالكرة
         </div>
         <div class="game-container" id="gameContainer">
             <div class="ball" id="ball"></div>
